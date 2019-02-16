@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interpreter", "Interpreter\NewC.Interpreter.csproj", "{9C81BCC7-A7DF-41F3-9928-CE8EF8085284}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Interpreter", "Interpreter\NewC.Interpreter.csproj", "{9C81BCC7-A7DF-41F3-9928-CE8EF8085284}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\NewC.Helpers.csproj", "{EBECEB4A-A742-455D-A19E-227983568CCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Helpers", "Helpers\NewC.Helpers.csproj", "{EBECEB4A-A742-455D-A19E-227983568CCA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scanner", "Scanner\NewC.Scanner.csproj", "{90EA4855-2D89-41C5-B777-CFDF4A577A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Scanner", "Scanner\NewC.Scanner.csproj", "{90EA4855-2D89-41C5-B777-CFDF4A577A59}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewC.Tools", "NewC.Tools\NewC.Tools.csproj", "{64C06476-2C88-45D2-AC2B-1C6879191605}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{90EA4855-2D89-41C5-B777-CFDF4A577A59}.Release|x64.Build.0 = Release|Any CPU
 		{90EA4855-2D89-41C5-B777-CFDF4A577A59}.Release|x86.ActiveCfg = Release|Any CPU
 		{90EA4855-2D89-41C5-B777-CFDF4A577A59}.Release|x86.Build.0 = Release|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Debug|x64.Build.0 = Debug|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Debug|x86.Build.0 = Debug|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Release|x64.ActiveCfg = Release|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Release|x64.Build.0 = Release|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Release|x86.ActiveCfg = Release|Any CPU
+		{64C06476-2C88-45D2-AC2B-1C6879191605}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
