@@ -96,7 +96,7 @@ namespace NewC.Parser
             Advance();
 
             // trim quotes and add string lexeme
-            AddToken(TokenType.STRING, source.Substring(start + 1, current - 1));
+            AddToken(TokenType.STRING, source.Substring(start + 1, current - start - 1));
         }
 
         private void Number() {
@@ -109,7 +109,7 @@ namespace NewC.Parser
                 while(IsDigit(Peek())) Advance();
             }
 
-            AddToken(TokenType.NUMBER, double.Parse(source.Substring(start, current)));
+            AddToken(TokenType.NUMBER, double.Parse(source.Substring(start, current - start)));
         }
 
         private void Identifier()
@@ -117,7 +117,7 @@ namespace NewC.Parser
             while(IsAlphaNumeric(Peek())) Advance();
 
             // see if the identifer is reserved word
-            var text = source.Substring(start, current);
+            var text = source.Substring(start, current - start);
             var type = KeyWord(text);
             if(type == 0) type = TokenType.IDENTIFIER;
 
@@ -180,7 +180,7 @@ namespace NewC.Parser
         }
 
          private void AddToken(TokenType type, object literal = null) {
-            var text = source.Substring(start, current);
+            var text = source.Substring(start, current - start);
             tokens.Add(new Token(type, text, literal, line));
         }
 
