@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NewC.Parser
+namespace NewC.Lexer
 {
     public enum TokenType
     {

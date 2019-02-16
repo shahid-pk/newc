@@ -1,9 +1,8 @@
 
 using System.Collections.Generic;
-using System.Text;
 using NewC.Helpers;
 
-namespace NewC.Parser
+namespace NewC.Lexer
 {
     public class Scanner
     {

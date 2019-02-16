@@ -1,5 +1,5 @@
 
-namespace NewC.Parser
+namespace NewC.Lexer
 {
     public class Token
     {

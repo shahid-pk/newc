@@ -5,7 +5,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="../Parser/Parser.csproj" />
+    <ProjectReference Include="..\Scanner\NewC.Scanner.csproj" />
   </ItemGroup>
 </Project>

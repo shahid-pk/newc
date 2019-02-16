@@ -1,10 +1,8 @@
-using System;
+using NewC.Lexer;
 using System.IO;
-using System.Collections.Generic;
 using static System.Console;
-using NewC.Parser;
 
-namespace NewC 
+namespace NewC
 {
     public class Interpret 
     {
