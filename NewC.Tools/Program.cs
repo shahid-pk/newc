@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace NewC.Tools
 {
@@ -32,16 +33,21 @@ namespace NewC.Tools
                 file.WriteLine("//This file includes AST types for newc");
                 file.WriteLine();
                 // use lexer namespace
-                file.WriteLine("using NewC.Lexer;");
+                file.WriteLine("using NewC.Scanner;");
                 file.WriteLine();
                 // write name space 
-                file.WriteLine("namespace NewC.Scanner");
+                file.WriteLine("namespace NewC.Parser");
                 file.WriteLine("{");
+                // write visitor interface
+                DefineVisitor(file, baseName, types);
+                file.WriteLine();
                 // Write abstract base ast class
                 file.WriteLine($"\tpublic abstract class {baseName}");
-                file.WriteLine("\t{}");
+                file.WriteLine("\t{");
+                file.WriteLine("\t\tpublic abstract T Accept<T>(IVisitor<T> visitor);");
+                file.WriteLine("\t}");
                 file.WriteLine();
-                // Write the derived AST classes.                                     
+                // Write the derived AST classes.                               
                 foreach (var type in types)
                 {
                     var className = type.Split(":")[0].Trim();
@@ -70,6 +76,20 @@ namespace NewC.Tools
             // empty line
             file.WriteLine();
 
+            // Fields accessor                                                   
+            foreach (var field in fields)
+            {
+                var type = field.Split(" ")[0];
+                var name = field.Split(" ")[1];
+                // try to make the property title case
+                // which is close to c# styling's pascal case
+                // for public properties
+                var titleCase = new System.Globalization.CultureInfo("en-US", false).TextInfo.ToTitleCase(name.ToLower());
+
+                file.WriteLine($"\t\tpublic {type} {titleCase} => {name};");
+            }
+            file.WriteLine();
+
             // Constructor.                                              
             file.WriteLine($"\t\tpublic {className}({fieldList})");
             file.WriteLine("\t\t{");
@@ -81,7 +101,29 @@ namespace NewC.Tools
             }
             // end constructor
             file.WriteLine("\t\t}");
+
+            // Visitor pattern.                                      
+            file.WriteLine();
+            file.WriteLine($"\t\tpublic override T Accept<T>(IVisitor<T> visitor)");
+            file.WriteLine("\t\t{");
+            file.WriteLine($"\t\t\treturn visitor.Visit{className}{baseName}(this);");
+            file.WriteLine("\t\t}");
+
             //end class
+            file.WriteLine("\t}");
+        }
+
+        private static void DefineVisitor(StreamWriter file, string baseName, List<string> types)
+        {
+            file.WriteLine("\tpublic interface IVisitor<T>");
+            file.WriteLine("\t{");
+
+            foreach (var type in types)
+            {
+                var typeName = type.Split(":")[0].Trim();
+                file.WriteLine($"\t\tT Visit{typeName}{baseName}({typeName} {baseName.ToLower()});");
+            }
+
             file.WriteLine("\t}");
         }
     }

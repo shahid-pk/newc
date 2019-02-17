@@ -1,8 +1,8 @@
 
 using System.Collections.Generic;
-using NewC.Helpers;
+using NewC.Analyzer;
 
-namespace NewC.Lexer
+namespace NewC.Scanner
 {
     public class Scanner
     {
@@ -11,14 +11,16 @@ namespace NewC.Lexer
         private int current = 0;
         private int line = 1;
         private readonly List<Token> tokens;
+        private readonly IErrorReporter reporter;
 
         public bool HasErrors { get; set; }
         
-        public Scanner(string source) 
+        public Scanner(string source, IErrorReporter reporter) 
         {
             this.source = source;
             this.HasErrors = false;
             this.tokens = new List<Token>();
+            this.reporter = reporter;
         }
 
         public List<Token> ScanTokens()
@@ -70,8 +72,7 @@ namespace NewC.Lexer
                     } else if(IsAlpha(c)) {
                         Identifier();
                     } else {
-                        var rptError = new ReportError();
-                        rptError.Error(line, "Unexpected character.");
+                        reporter.Error(line, "Unexpected character.");
                         HasErrors = true;
                     }
                 break;
@@ -86,8 +87,7 @@ namespace NewC.Lexer
 
             // unterminated string
             if(IsAtEnd()) {
-                var rptError = new ReportError();
-                rptError.Error(line, "Unterminated String");
+                reporter.Error(line, "Unterminated String");
                 HasErrors = true;
             }
 

@@ -1,4 +1,4 @@
-using NewC.Lexer;
+using NewC.Analyzer;
 using System.IO;
 using static System.Console;
 
@@ -22,16 +22,22 @@ namespace NewC
 
         private void Run(string source)
         {
-            var scanner = new Scanner(source);
-            var tokens = scanner.ScanTokens();
+            var reporter = new ErrorReporter();
 
-            // scanner has already reported the error
-            // we don't need to do anything
-            if(!scanner.HasErrors) {
-                foreach(var token in tokens) {
-                    WriteLine($"{token}");
-                }
-            }
+            var scanner = new Scanner.Scanner(source, reporter);
+            var tokens = scanner.ScanTokens();
+            var parser = new Parser.Parser(tokens, reporter);
+            var expression = parser.Parse();
+
+            if (parser.HadError) return;
+
+            WriteLine(new AstPrinter().Print(expression));
+            // print tokens
+            //if(!scanner.HasErrors) {
+            //    foreach(var token in tokens) {
+            //        WriteLine($"{token}");
+            //    }
+            //}
         }
     }
 }

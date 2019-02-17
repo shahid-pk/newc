@@ -7,6 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Scanner\NewC.Scanner.csproj" />
+    <ProjectReference Include="..\Scanner\NewC.Analyzer.csproj" />
   </ItemGroup>
 </Project>

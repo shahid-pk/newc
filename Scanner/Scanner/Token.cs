@@ -1,5 +1,5 @@
 
-namespace NewC.Lexer
+namespace NewC.Scanner
 {
     public class Token
     {
@@ -15,6 +15,11 @@ namespace NewC.Lexer
             this.literal = literal;
             this.line = line;
         }
+
+        public string Lexeme => lexeme;
+        public int Line => line;
+        public object Literal => literal;
+        public TokenType Type => type;
 
         public override string ToString()
         {

@@ -1,8 +1,10 @@
-﻿using static System.Console;
+﻿using System;
+using static System.Console;
+using NewC.Scanner;
 
-namespace NewC.Helpers
+namespace NewC.Analyzer
 {
-    public class ReportError
+    public class ErrorReporter : IErrorReporter
     {
         public void Error(int line, string message)
         {
@@ -14,15 +16,15 @@ namespace NewC.Helpers
             WriteLine($"[{line}] Error {where} : {message}");
         }
 
-        static void error(Token token, String message)
+        public void Error(Token token, String message)
         {
-            if (token.type == TokenType.EOF)
+            if (token.Type == TokenType.EOF)
             {
-                report(token.line, " at end", message);
+                Report(token.Line, " at end", message);
             }
             else
             {
-                report(token.line, " at '" + token.lexeme + "'", message);
+                Report(token.Line, " at '" + token.Lexeme + "'", message);
             }
         }
     }
