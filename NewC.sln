@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Interpreter", "Interpreter\NewC.Interpreter.csproj", "{9C81BCC7-A7DF-41F3-9928-CE8EF8085284}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Analyzer", "Scanner\NewC.Analyzer.csproj", "{90EA4855-2D89-41C5-B777-CFDF4A577A59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Analyzer", "Analyzer\NewC.Analyzer.csproj", "{90EA4855-2D89-41C5-B777-CFDF4A577A59}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Tools", "NewC.Tools\NewC.Tools.csproj", "{64C06476-2C88-45D2-AC2B-1C6879191605}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewC.Tools", "Tools\NewC.Tools.csproj", "{64C06476-2C88-45D2-AC2B-1C6879191605}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
