@@ -40,6 +40,25 @@ namespace NewC.Parser
 		}
 	}
 
+	public class If : Stmt
+	{
+		public Expr Condition { get;private set; }
+		public Stmt Thenbranch { get;private set; }
+		public Stmt Elsebranch { get;private set; }
+
+		public If(Expr condition,Stmt thenBranch,Stmt elseBranch)
+		{
+			this.Condition = condition;
+			this.Thenbranch = thenBranch;
+			this.Elsebranch = elseBranch;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitIfStmt(this);
+		}
+	}
+
 	public class Print : Stmt
 	{
 		public Expr Expr { get;private set; }

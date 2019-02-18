@@ -36,6 +36,11 @@ namespace NewC.Analyzer
             return Parenthesize("group", expr.Expression);
         }
 
+        public string VisitIfStmt(If stmt)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitLiteralExpr(Literal expr)
         {
             if (expr.Value == null) return "nil";

@@ -25,6 +25,7 @@ namespace NewC.Tools
             DefineAst(outputDir, "Stmt", new List<string> {
                 "Block : System.Collections.Generic.List<Stmt> statements",
                 "Expression : Expr Expr",
+                "If : Expr condition,Stmt thenBranch,Stmt elseBranch",
                 "Print : Expr Expr",
                 "Var : Token name,Expr initializer"
             });

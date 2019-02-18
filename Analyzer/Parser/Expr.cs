@@ -17,6 +17,7 @@ namespace NewC.Parser
         T VisitExpressionStmt(Expression stmt);
         T VisitPrintStmt(Print stmt);
         T VisitVarStmt(Var stmt);
+        T VisitIfStmt(If stmt);
     }
 
 	public abstract class Expr

@@ -95,7 +95,7 @@ namespace NewC.Scanner
             Advance();
 
             // trim quotes and add string lexeme
-            AddToken(TokenType.STRING, source.Substring(start + 1, current - start - 1));
+            AddToken(TokenType.STRING, source.Substring(start + 1, current - start - 2));
         }
 
         private void Number() {

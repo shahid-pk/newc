@@ -6,8 +6,10 @@
 //               | statement ;
 //varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 //statement      → exprStmt
+//               | ifStmt
 //               | printStmt 
 //               | block;
+//ifStmt         → "if" expression "{" statement "}" ( "else"  "{" statement "}" )? ;
 //block          → "{" declaration* "}" ;
 //exprStmt       → expression ";" ;
 //printStmt      → "print" expression ";" ;
@@ -93,8 +95,35 @@ namespace NewC.Parser
         {
             if (Match(TokenType.PRINT)) return PrintStatement();
             if (Match(TokenType.LEFT_BRACE)) return new Block(Block());
+            if (Match(TokenType.IF)) return IfStatement();
 
             return ExpresionStatement();
+        }
+
+        private Stmt IfStatement()
+        {
+            var condition = Expression();
+
+            Consume(TokenType.LEFT_BRACE, "Expect '{' after if condition.");
+            var thenBranch = Statement();
+            Consume(TokenType.RIGHT_BRACE, "Expect '}' after if branch.");
+
+            Stmt elseBranch = null;
+            if(Match(TokenType.ELSE))
+            {
+                if (Match(TokenType.IF))
+                {
+                    elseBranch = IfStatement();
+                }
+                else
+                {
+                    Consume(TokenType.LEFT_BRACE, "Expect '{' after else.");
+                    elseBranch = Statement();
+                    Consume(TokenType.RIGHT_BRACE, "Expect '}' after else branch.");
+                }
+            }
+
+            return new If(condition, thenBranch, elseBranch);
         }
 
         private Stmt PrintStatement()

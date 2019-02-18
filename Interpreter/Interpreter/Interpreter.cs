@@ -46,6 +46,25 @@ namespace NewC
             return null;
         }
 
+        public object VisitIfStmt(If stmt)
+        {
+            var condition = Evaluate(stmt.Condition);
+            if(!(condition is bool))
+            {
+                condition = IsTruthy(condition);
+            }
+
+            if((bool)condition)
+            {
+                Execute(stmt.Thenbranch);
+            }
+            else if (stmt.Elsebranch != null)
+            {
+                Execute(stmt.Elsebranch);
+            }
+            return null;
+        }
+
         public object VisitVariableExpr(Variable expr)
         {
             return environment.GetVar(expr.Name);
