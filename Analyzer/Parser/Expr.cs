@@ -7,17 +7,37 @@ namespace NewC.Parser
 {
 	public interface IVisitor<T>
 	{
+		T VisitAssignExpr(Assign expr);
 		T VisitBinaryExpr(Binary expr);
 		T VisitGroupingExpr(Grouping expr);
 		T VisitLiteralExpr(Literal expr);
 		T VisitUnaryExpr(Unary expr);
+		T VisitVariableExpr(Variable expr);
         T VisitExpressionStmt(Expression stmt);
         T VisitPrintStmt(Print stmt);
+        T VisitVarStmt(Var stmt);
     }
 
 	public abstract class Expr
 	{
 		public abstract T Accept<T>(IVisitor<T> visitor);
+	}
+
+	public class Assign : Expr
+	{
+		public Token Name { get;private set; }
+		public  Expr Value { get;private set; }
+
+		public Assign(Token name, Expr value)
+		{
+			this.Name = name;
+			this.Value = value;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitAssignExpr(this);
+		}
 	}
 
 	public class Binary : Expr
@@ -83,6 +103,21 @@ namespace NewC.Parser
 		public override T Accept<T>(IVisitor<T> visitor)
 		{
 			return visitor.VisitUnaryExpr(this);
+		}
+	}
+
+	public class Variable : Expr
+	{
+		public Token Name { get;private set; }
+
+		public Variable(Token name)
+		{
+			this.Name = name;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitVariableExpr(this);
 		}
 	}
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NewC.Tools
 {
@@ -16,14 +15,17 @@ namespace NewC.Tools
             }
             var outputDir = args[0];
             DefineAst(outputDir, "Expr", new List<string> {
+                "Assign   : Token name,Expr value",
                 "Binary   : Expr left,Token op,Expr right",
                 "Grouping : Expr expression",
                 "Literal  : object value",
-                "Unary    : Token op,Expr right"
+                "Unary    : Token op,Expr right",
+                "Variable : Token name"
             });
             DefineAst(outputDir, "Stmt", new List<string> {
                 "Expression : Expr Expr",
-                "Print : Expr Expr"
+                "Print : Expr Expr",
+                "Var : Token name,Expr initializer"
             });
             return 0;
         }

@@ -40,4 +40,21 @@ namespace NewC.Parser
 		}
 	}
 
+	public class Var : Stmt
+	{
+		public Token Name { get;private set; }
+		public Expr Initializer { get;private set; }
+
+		public Var(Token name,Expr initializer)
+		{
+			this.Name = name;
+			this.Initializer = initializer;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitVarStmt(this);
+		}
+	}
+
 }

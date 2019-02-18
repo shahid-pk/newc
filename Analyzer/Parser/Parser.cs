@@ -1,21 +1,26 @@
 ﻿
 // grammar rules for newc
-//program   → statement* EOF;
 
-//statement → exprStmt
-//          | printStmt ;
-
-//exprStmt  → expression ";" ;
-//printStmt → "print" expression ";" ;
-//expression     -> equality ;
-//equality       -> comparison(( "!=" | "==" ) comparison )* ;
-//comparison     -> addition(( ">" | ">=" | "<" | "<=" ) addition )* ;
-//addition       -> multiplication(( "-" | "+" ) multiplication )* ;
-//multiplication -> unary(( "/" | "*" ) unary )* ;
-//unary          -> ( "!" | "-" ) unary
+//program        → declaration* EOF;
+//declaration    → varDecl
+//               | statement ;
+//varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
+//statement      → exprStmt
+//               | printStmt ;
+//exprStmt       → expression ";" ;
+//printStmt      → "print" expression ";" ;
+//expression     → assignment ;
+//assignment     → IDENTIFIER "=" assignment
+//               | equality ;
+//equality       → comparison(( "!=" | "==" ) comparison )* ;
+//comparison     → addition(( ">" | ">=" | "<" | "<=" ) addition )* ;
+//addition       → multiplication(( "-" | "+" ) multiplication )* ;
+//multiplication → unary(( "/" | "*" ) unary )* ;
+//unary          → ( "!" | "-" ) unary
 //               | primary ;
-//primary        -> NUMBER | STRING | "false" | "true" | "nil"
-//               | "(" expression ")" ;
+//primary        → NUMBER | STRING | "false" | "true" | "nil"
+//               | "(" expression ")" 
+//               | IDENTIFIER;
 
 using System;
 using System.Collections.Generic;
@@ -44,20 +49,42 @@ namespace NewC.Parser
 
         public List<Stmt> Parse()
         {
+            var statements = new List<Stmt>();
+            while (!IsAtEnd())
+            {
+                statements.Add(Declaration());
+            }
+            return statements;
+        }
+
+        private Stmt Declaration()
+        {
             try
             {
-                var statements = new List<Stmt>();
-                while(!IsAtEnd())
-                {
-                    statements.Add(Statement());
-                }
-                return statements;
+                if (Match(TokenType.VAR)) return VarDeclaration();
+                return Statement();
             }
-            catch(ParseErrorException)
+            catch (ParseErrorException)
             {
                 HadError = true;
+                Synchoronize();
                 return null;
             }
+        }
+
+        private Stmt VarDeclaration()
+        {
+            var name = Consume(TokenType.IDENTIFIER, "Expect variable name.");
+
+            Expr initializer = null;
+            if(Match(TokenType.EQUAL))
+            {
+                initializer = Expression();
+            }
+
+            Consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
+
+            return new Var(name, initializer);
         }
 
         private Stmt Statement()
@@ -82,7 +109,29 @@ namespace NewC.Parser
 
         private Expr Expression()
         {
-            return Equality();
+            return Assignment();
+        }
+
+        private Expr Assignment()
+        {
+            var expr = Equality();
+
+            if(Match(TokenType.EQUAL))
+            {
+                Token equals = Previous();
+                Expr value = Assignment();
+                
+                if(expr is Variable)
+                {
+                    Token name = ((Variable)expr).Name;
+                    return new Assign(name, value);
+                }
+
+                Error(equals, "Invalid assignment target");
+                HadError = true;
+            }
+
+            return expr;
         }
 
         private Expr Equality()
@@ -166,6 +215,11 @@ namespace NewC.Parser
                 var expr = Expression();
                 Consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
                 return new Grouping(expr);
+            }
+
+            if(Match(TokenType.IDENTIFIER))
+            {
+                return new Variable(Previous());
             }
 
             throw Error(Peek(), "Expected Expression");

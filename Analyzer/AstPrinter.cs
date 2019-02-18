@@ -42,6 +42,16 @@ namespace NewC.Analyzer
             return Parenthesize(expr.Op.Lexeme, expr.Right);
         }
 
+        public string VisitVariableExpr(Variable expr)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitVarStmt(Var stmt)
+        {
+            throw new NotImplementedException();
+        }
+
         private string Parenthesize(string name, params Expr[] exprs)
         {
             StringBuilder builder = new StringBuilder();

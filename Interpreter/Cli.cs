@@ -6,6 +6,8 @@ namespace NewC
 {
     public class Cli
     {
+        private Interpreter interpreter;
+
         public int RunFile(string path)
         {
             var source = File.ReadAllText(path);
@@ -33,8 +35,12 @@ namespace NewC
 
             if (parser.HadError) return 65;
 
-            var interpreter = new Interpreter(statements, reporter);
-            interpreter.Interpret();
+            if(interpreter == null)
+            {
+                interpreter = new Interpreter(reporter);
+            }
+
+            interpreter.Interpret(statements);
 
             if (interpreter.HadRuntimeError) return 70;
 

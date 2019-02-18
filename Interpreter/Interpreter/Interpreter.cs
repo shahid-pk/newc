@@ -8,18 +8,18 @@ namespace NewC
 {
     public class Interpreter : IVisitor<object>
     {
-        private readonly List<Stmt> statements;
         private readonly IErrorReporter reporter;
+        private readonly Environment environment;
         public bool HadRuntimeError { get; private set; }
 
-        public Interpreter(List<Stmt> statements, IErrorReporter reporter)
+        public Interpreter(IErrorReporter reporter)
         {
-            this.statements = statements;
             this.reporter = reporter;
+            this.environment = new Environment();
             this.HadRuntimeError = false;
         }
 
-        public void Interpret()
+        public void Interpret(List<Stmt> statements)
         {
             try
             {
@@ -33,6 +33,29 @@ namespace NewC
                 reporter.Error(ex.Token, ex.Message);
                 this.HadRuntimeError = true;
             }
+        }
+
+        public object VisitVarStmt(Var stmt)
+        {
+            object value = null;
+            if(stmt.Initializer != null)
+            {
+                value = Evaluate(stmt.Initializer);
+            }
+            environment.DefineVar(stmt.Name, value);
+            return null;
+        }
+
+        public object VisitVariableExpr(Variable expr)
+        {
+            return environment.GetVar(expr.Name);
+        }
+
+        public object VisitAssignExpr(Assign expr)
+        {
+            object value = Evaluate(expr.Value);
+            environment.AssignVar(expr.Name, value);
+            return value;
         }
 
         public object VisitExpressionStmt(Expression stmt)
