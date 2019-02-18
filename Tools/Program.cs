@@ -21,6 +21,10 @@ namespace NewC.Tools
                 "Literal  : object value",
                 "Unary    : Token op,Expr right"
             });
+            DefineAst(outputDir, "Stmt", new List<string> {
+                "Expression : Expr Expr",
+                "Print : Expr Expr"
+            });
             return 0;
         }
 
@@ -68,15 +72,8 @@ namespace NewC.Tools
             file.WriteLine($"\tpublic class {className} : {baseName}");
             file.WriteLine("\t{");
 
-            // Fields.                                                   
-            foreach (var field in fields)
-            {
-                file.WriteLine($"\t\tprivate {field};");
-            }
-            // empty line
-            file.WriteLine();
-
-            // Fields accessor                                                   
+            // public Fields accessor
+            // and private mutators
             foreach (var field in fields)
             {
                 var type = field.Split(" ")[0];
@@ -86,7 +83,7 @@ namespace NewC.Tools
                 // for public properties
                 var titleCase = new System.Globalization.CultureInfo("en-US", false).TextInfo.ToTitleCase(name.ToLower());
 
-                file.WriteLine($"\t\tpublic {type} {titleCase} => {name};");
+                file.WriteLine($"\t\tpublic {type} {titleCase} {{ get;private set; }}");
             }
             file.WriteLine();
 
@@ -97,7 +94,8 @@ namespace NewC.Tools
             foreach (var field in fields)
             {
                 var name = field.Split(" ")[1];
-                file.WriteLine($"\t\t\tthis.{name} = {name};");
+                var titleCase = new System.Globalization.CultureInfo("en-US", false).TextInfo.ToTitleCase(name.ToLower());
+                file.WriteLine($"\t\t\tthis.{titleCase} = {name};");
             }
             // end constructor
             file.WriteLine("\t\t}");

@@ -11,7 +11,9 @@ namespace NewC.Parser
 		T VisitGroupingExpr(Grouping expr);
 		T VisitLiteralExpr(Literal expr);
 		T VisitUnaryExpr(Unary expr);
-	}
+        T VisitExpressionStmt(Expression stmt);
+        T VisitPrintStmt(Print stmt);
+    }
 
 	public abstract class Expr
 	{
@@ -20,19 +22,15 @@ namespace NewC.Parser
 
 	public class Binary : Expr
 	{
-		private Expr left;
-		private Token op;
-		private Expr right;
-
-		public Expr Left => left;
-		public Token Op => op;
-		public Expr Right => right;
+		public Expr Left { get;private set; }
+		public Token Op { get;private set; }
+		public Expr Right { get;private set; }
 
 		public Binary(Expr left,Token op,Expr right)
 		{
-			this.left = left;
-			this.op = op;
-			this.right = right;
+			this.Left = left;
+			this.Op = op;
+			this.Right = right;
 		}
 
 		public override T Accept<T>(IVisitor<T> visitor)
@@ -43,13 +41,11 @@ namespace NewC.Parser
 
 	public class Grouping : Expr
 	{
-		private Expr expression;
-
-		public Expr Expression => expression;
+		public Expr Expression { get;private set; }
 
 		public Grouping(Expr expression)
 		{
-			this.expression = expression;
+			this.Expression = expression;
 		}
 
 		public override T Accept<T>(IVisitor<T> visitor)
@@ -60,13 +56,11 @@ namespace NewC.Parser
 
 	public class Literal : Expr
 	{
-		private object value;
-
-		public object Value => value;
+		public object Value { get;private set; }
 
 		public Literal(object value)
 		{
-			this.value = value;
+			this.Value = value;
 		}
 
 		public override T Accept<T>(IVisitor<T> visitor)
@@ -77,16 +71,13 @@ namespace NewC.Parser
 
 	public class Unary : Expr
 	{
-		private Token op;
-		private Expr right;
-
-		public Token Op => op;
-		public Expr Right => right;
+		public Token Op { get;private set; }
+		public Expr Right { get;private set; }
 
 		public Unary(Token op,Expr right)
 		{
-			this.op = op;
-			this.right = right;
+			this.Op = op;
+			this.Right = right;
 		}
 
 		public override T Accept<T>(IVisitor<T> visitor)

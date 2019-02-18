@@ -29,19 +29,14 @@ namespace NewC
             var tokens = scanner.ScanTokens();
 
             var parser = new Parser.Parser(tokens, reporter);
-            var expression = parser.Parse();
+            var statements = parser.Parse();
 
             if (parser.HadError) return 65;
 
-            var interpreter = new Interpreter(expression, reporter);
-            var value = interpreter.Interpret();
+            var interpreter = new Interpreter(statements, reporter);
+            interpreter.Interpret();
 
             if (interpreter.HadRuntimeError) return 70;
-
-            if(!isFile)
-            {
-                WriteLine($"{value}");
-            }
 
             return 0;
         }

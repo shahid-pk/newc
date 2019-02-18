@@ -16,6 +16,11 @@ namespace NewC.Analyzer
             return Parenthesize(expr.Op.Lexeme, expr.Left, expr.Right);
         }
 
+        public string VisitExpressionStmt(Expression stmt)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitGroupingExpr(Grouping expr)
         {
             return Parenthesize("group", expr.Expression);
@@ -25,6 +30,11 @@ namespace NewC.Analyzer
         {
             if (expr.Value == null) return "nil";
             return expr.Value.ToString();
+        }
+
+        public string VisitPrintStmt(Print stmt)
+        {
+            throw new NotImplementedException();
         }
 
         public string VisitUnaryExpr(Unary expr)

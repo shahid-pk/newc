@@ -1,5 +1,12 @@
 ﻿
 // grammar rules for newc
+//program   → statement* EOF;
+
+//statement → exprStmt
+//          | printStmt ;
+
+//exprStmt  → expression ";" ;
+//printStmt → "print" expression ";" ;
 //expression     -> equality ;
 //equality       -> comparison(( "!=" | "==" ) comparison )* ;
 //comparison     -> addition(( ">" | ">=" | "<" | "<=" ) addition )* ;
@@ -35,17 +42,42 @@ namespace NewC.Parser
             HadError = false;
         }
 
-        public Expr Parse()
+        public List<Stmt> Parse()
         {
             try
             {
-                return Expression();
+                var statements = new List<Stmt>();
+                while(!IsAtEnd())
+                {
+                    statements.Add(Statement());
+                }
+                return statements;
             }
             catch(ParseErrorException)
             {
                 HadError = true;
                 return null;
             }
+        }
+
+        private Stmt Statement()
+        {
+            if (Match(TokenType.PRINT)) return PrintStatement();
+            return ExpresionStatement();
+        }
+
+        private Stmt PrintStatement()
+        {
+            var value = Expression();
+            Consume(TokenType.SEMICOLON, "Expect ';' after value.");
+            return new Print(value);
+        }
+
+        private Stmt ExpresionStatement()
+        {
+            var expr = Expression();
+            Consume(TokenType.SEMICOLON, "Expect ';' after Expression.");
+            return new Expression(expr);
         }
 
         private Expr Expression()

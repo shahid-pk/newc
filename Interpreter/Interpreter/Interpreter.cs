@@ -1,36 +1,51 @@
 using NewC.Analyzer;
 using NewC.Parser;
 using NewC.Scanner;
+using System;
+using System.Collections.Generic;
 
 namespace NewC
 {
     public class Interpreter : IVisitor<object>
     {
-        private readonly Expr expression;
+        private readonly List<Stmt> statements;
         private readonly IErrorReporter reporter;
         public bool HadRuntimeError { get; private set; }
 
-        public Interpreter(Expr expression, IErrorReporter reporter)
+        public Interpreter(List<Stmt> statements, IErrorReporter reporter)
         {
-            this.expression = expression;
+            this.statements = statements;
             this.reporter = reporter;
             this.HadRuntimeError = false;
         }
 
-        public string Interpret()
+        public void Interpret()
         {
             try
             {
-                var value = Evaluate(expression);
-                return Stringify(value);
+                foreach(var statement in statements)
+                {
+                    Execute(statement);
+                }
             }
             catch(RuntimeException ex)
             {
                 reporter.Error(ex.Token, ex.Message);
                 this.HadRuntimeError = true;
-                // to make the compiler happy
-                return "\n";
             }
+        }
+
+        public object VisitExpressionStmt(Expression stmt)
+        {
+            Evaluate(stmt.Expr);
+            return null;
+        }
+
+        public object VisitPrintStmt(Print stmt)
+        {
+            var value = Evaluate(stmt.Expr);
+            Console.WriteLine(Stringify(value));
+            return null;
         }
 
         public object VisitBinaryExpr(Binary expr)
@@ -141,6 +156,11 @@ namespace NewC
         private object Evaluate(Expr expr)
         {
             return expr.Accept(this);
+        }
+
+        private object Execute(Stmt statement)
+        {
+            return statement.Accept(this);
         }
 
         private bool IsTruthy(object val)
