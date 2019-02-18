@@ -23,6 +23,7 @@ namespace NewC.Tools
                 "Variable : Token name"
             });
             DefineAst(outputDir, "Stmt", new List<string> {
+                "Block : System.Collections.Generic.List<Stmt> statements",
                 "Expression : Expr Expr",
                 "Print : Expr Expr",
                 "Var : Token name,Expr initializer"

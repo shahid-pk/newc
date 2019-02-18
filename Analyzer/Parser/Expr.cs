@@ -13,6 +13,7 @@ namespace NewC.Parser
 		T VisitLiteralExpr(Literal expr);
 		T VisitUnaryExpr(Unary expr);
 		T VisitVariableExpr(Variable expr);
+        T VisitBlockStmt(Block stmt);
         T VisitExpressionStmt(Expression stmt);
         T VisitPrintStmt(Print stmt);
         T VisitVarStmt(Var stmt);
@@ -26,9 +27,9 @@ namespace NewC.Parser
 	public class Assign : Expr
 	{
 		public Token Name { get;private set; }
-		public  Expr Value { get;private set; }
+		public Expr Value { get;private set; }
 
-		public Assign(Token name, Expr value)
+		public Assign(Token name,Expr value)
 		{
 			this.Name = name;
 			this.Value = value;

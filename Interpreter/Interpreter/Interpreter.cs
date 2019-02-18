@@ -9,7 +9,7 @@ namespace NewC
     public class Interpreter : IVisitor<object>
     {
         private readonly IErrorReporter reporter;
-        private readonly Environment environment;
+        private Environment environment;
         public bool HadRuntimeError { get; private set; }
 
         public Interpreter(IErrorReporter reporter)
@@ -68,6 +68,12 @@ namespace NewC
         {
             var value = Evaluate(stmt.Expr);
             Console.WriteLine(Stringify(value));
+            return null;
+        }
+
+        public object VisitBlockStmt(Block stmt)
+        {
+            ExecuteBlock(stmt.Statements, new Environment(environment));
             return null;
         }
 
@@ -145,6 +151,23 @@ namespace NewC
 
             // unreachable code
             return null;
+        }
+
+        private void ExecuteBlock(List<Stmt> statements, Environment environment)
+        {
+            var previous = this.environment;
+            try
+            {
+                this.environment = environment;
+                foreach(var statement in statements)
+                {
+                    Execute(statement);
+                }
+            }
+            finally
+            {
+                this.environment = previous;
+            }
         }
 
         private string Stringify(object obj)

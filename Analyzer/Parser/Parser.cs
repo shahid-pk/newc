@@ -6,7 +6,9 @@
 //               | statement ;
 //varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 //statement      → exprStmt
-//               | printStmt ;
+//               | printStmt 
+//               | block;
+//block          → "{" declaration* "}" ;
 //exprStmt       → expression ";" ;
 //printStmt      → "print" expression ";" ;
 //expression     → assignment ;
@@ -90,6 +92,8 @@ namespace NewC.Parser
         private Stmt Statement()
         {
             if (Match(TokenType.PRINT)) return PrintStatement();
+            if (Match(TokenType.LEFT_BRACE)) return new Block(Block());
+
             return ExpresionStatement();
         }
 
@@ -105,6 +109,18 @@ namespace NewC.Parser
             var expr = Expression();
             Consume(TokenType.SEMICOLON, "Expect ';' after Expression.");
             return new Expression(expr);
+        }
+
+        private List<Stmt> Block()
+        {
+            var statements = new List<Stmt>();
+
+            while(!Check(TokenType.RIGHT_BRACE) && !IsAtEnd())
+            {
+                statements.Add(Declaration());
+            }
+            Consume(TokenType.RIGHT_BRACE, "Expect '}' after block");
+            return statements;
         }
 
         private Expr Expression()

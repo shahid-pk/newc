@@ -11,9 +11,19 @@ namespace NewC.Analyzer
             return expr.Accept(this);
         }
 
+        public string VisitAssignExpr(Assign expr)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitBinaryExpr(Binary expr)
         {
             return Parenthesize(expr.Op.Lexeme, expr.Left, expr.Right);
+        }
+
+        public string VisitBlockStmt(Block stmt)
+        {
+            throw new NotImplementedException();
         }
 
         public string VisitExpressionStmt(Expression stmt)

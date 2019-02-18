@@ -10,6 +10,21 @@ namespace NewC.Parser
 		public abstract T Accept<T>(IVisitor<T> visitor);
 	}
 
+	public class Block : Stmt
+	{
+		public System.Collections.Generic.List<Stmt> Statements { get;private set; }
+
+		public Block(System.Collections.Generic.List<Stmt> statements)
+		{
+			this.Statements = statements;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitBlockStmt(this);
+		}
+	}
+
 	public class Expression : Stmt
 	{
 		public Expr Expr { get;private set; }

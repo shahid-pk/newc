@@ -6,10 +6,18 @@ namespace NewC
     public class Environment
     {
         private readonly Dictionary<string, object> values;
+        private Environment enclosing;
 
         public Environment()
         {
             this.values = new Dictionary<string, object>();
+            this.enclosing = null;
+        }
+
+        public Environment(Environment enclosing)
+        {
+            this.values = new Dictionary<string, object>();
+            this.enclosing = enclosing;
         }
 
         public void DefineVar(Token name, object value)
@@ -28,6 +36,11 @@ namespace NewC
                 return values[name.Lexeme];
             }
 
+            if(enclosing != null)
+            {
+                return enclosing.GetVar(name);
+            }
+
             throw new RuntimeException(name, $"Undefined variable {name.Lexeme}.");
         }
 
@@ -36,6 +49,11 @@ namespace NewC
             if (values.ContainsKey(name.Lexeme))
             {
                 values[name.Lexeme] = value;
+            }
+
+            if(enclosing != null)
+            {
+                enclosing.AssignVar(name, value);
             }
 
             throw new RuntimeException(name, $"Undefined variable {name.Lexeme}.");
