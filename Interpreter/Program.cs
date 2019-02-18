@@ -6,15 +6,15 @@ namespace NewC
     {
         static int Main(string[] args)
         {
-            var interpret = new Interpret();
+            var cli = new Cli();
 
             if(args.Length > 0) {
                 WriteLine("Usage: newc [script]");
                 return 64;
             } else if (args.Length == 1) {
-                interpret.RunFile(args[0]);
+                cli.RunFile(args[0]);
             } else {
-                interpret.RunPrompt();
+                cli.RunPrompt();
             }
             return 0;
         }
