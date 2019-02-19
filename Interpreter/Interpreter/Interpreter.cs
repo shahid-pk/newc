@@ -48,13 +48,7 @@ namespace NewC
 
         public object VisitIfStmt(If stmt)
         {
-            var condition = Evaluate(stmt.Condition);
-            if(!(condition is bool))
-            {
-                condition = IsTruthy(condition);
-            }
-
-            if((bool)condition)
+            if(IsTruthy(Evaluate(stmt.Condition)))
             {
                 Execute(stmt.Thenbranch);
             }
@@ -67,7 +61,7 @@ namespace NewC
 
         public object VisitWhileStmt(While stmt)
         {
-            while(IsTruthy(Evaluate(stmt.Condition)))
+            while (IsTruthy(Evaluate(stmt.Condition)))
             {
                 Execute(stmt.Body);
             }
@@ -256,7 +250,7 @@ namespace NewC
         private bool IsTruthy(object val)
         {
             if (val == null) return false;
-            if (val is bool) return false;
+            if (val is bool) return (bool)val ? true : false;
 
             return true;
         }

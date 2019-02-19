@@ -10,11 +10,11 @@
 //               | printStmt 
 //               | block
 //               | whileStmt ;
-//ifStmt         → "if" expression "{" statement "}" ( "else"  "{" statement "}" )? ;
+//ifStmt         → "if" expression block ( "else" (ifStmt)* | block )? ;
 //block          → "{" declaration* "}" ;
 //exprStmt       → expression ";" ;
 //printStmt      → "print" expression ";" ;
-//whileStmt      → "while" expression  "{" statement "}";
+//whileStmt      → "while" expression block;
 //expression     → assignment ;
 //assignment     → IDENTIFIER "=" assignment
 //               | logic_or ;
@@ -110,8 +110,7 @@ namespace NewC.Parser
             var  condition = Expression();
 
             Consume(TokenType.LEFT_BRACE, "Expect '{' after while condition;");
-            var body = Statement();
-            Consume(TokenType.RIGHT_BRACE, "Expect '}' after while statement;");
+            var body = new Block(Block());
 
             return new While(condition, body);
         }
@@ -121,8 +120,7 @@ namespace NewC.Parser
             var condition = Expression();
 
             Consume(TokenType.LEFT_BRACE, "Expect '{' after if condition.");
-            var thenBranch = Statement();
-            Consume(TokenType.RIGHT_BRACE, "Expect '}' after if branch.");
+            var thenBranch = new Block(Block());
 
             Stmt elseBranch = null;
             if(Match(TokenType.ELSE))
@@ -134,8 +132,7 @@ namespace NewC.Parser
                 else
                 {
                     Consume(TokenType.LEFT_BRACE, "Expect '{' after else.");
-                    elseBranch = Statement();
-                    Consume(TokenType.RIGHT_BRACE, "Expect '}' after else branch.");
+                    elseBranch = new Block(Block());
                 }
             }
 

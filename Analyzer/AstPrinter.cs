@@ -47,6 +47,11 @@ namespace NewC.Analyzer
             return expr.Value.ToString();
         }
 
+        public string VisitLogicalExpr(Logical expr)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitPrintStmt(Print stmt)
         {
             throw new NotImplementedException();
@@ -63,6 +68,11 @@ namespace NewC.Analyzer
         }
 
         public string VisitVarStmt(Var stmt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string VisitWhileStmt(While stmt)
         {
             throw new NotImplementedException();
         }
