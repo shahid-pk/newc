@@ -44,16 +44,16 @@ namespace NewC
             throw new RuntimeException(name, $"Undefined variable {name.Lexeme}.");
         }
 
-        public void AssignVar(Token name, object value)
+        public object AssignVar(Token name, object value)
         {
             if (values.ContainsKey(name.Lexeme))
             {
-                values[name.Lexeme] = value;
+                return values[name.Lexeme] = value;
             }
 
             if(enclosing != null)
             {
-                enclosing.AssignVar(name, value);
+                return enclosing.AssignVar(name, value);
             }
 
             throw new RuntimeException(name, $"Undefined variable {name.Lexeme}.");

@@ -91,4 +91,21 @@ namespace NewC.Parser
 		}
 	}
 
+	public class While : Stmt
+	{
+		public Expr Condition { get;private set; }
+		public Stmt Body { get;private set; }
+
+		public While(Expr condition,Stmt body)
+		{
+			this.Condition = condition;
+			this.Body = body;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitWhileStmt(this);
+		}
+	}
+
 }

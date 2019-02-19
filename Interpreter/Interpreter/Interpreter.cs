@@ -65,6 +65,31 @@ namespace NewC
             return null;
         }
 
+        public object VisitWhileStmt(While stmt)
+        {
+            while(IsTruthy(Evaluate(stmt.Condition)))
+            {
+                Execute(stmt.Body);
+            }
+            return null;
+        }
+
+        public object VisitLogicalExpr(Logical expr)
+        {
+            var left = Evaluate(expr.Left);
+
+            if(expr.Op.Type == TokenType.OR)
+            {
+                if (IsTruthy(left)) return left;
+            }
+            else
+            {
+                if (!IsTruthy(left)) return left;
+            }
+
+            return Evaluate(expr.Right);
+        }
+
         public object VisitVariableExpr(Variable expr)
         {
             return environment.GetVar(expr.Name);

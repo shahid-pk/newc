@@ -19,6 +19,7 @@ namespace NewC.Tools
                 "Binary   : Expr left,Token op,Expr right",
                 "Grouping : Expr expression",
                 "Literal  : object value",
+                "Logical  : Expr left,Token op,Expr right",
                 "Unary    : Token op,Expr right",
                 "Variable : Token name"
             });
@@ -27,7 +28,8 @@ namespace NewC.Tools
                 "Expression : Expr Expr",
                 "If : Expr condition,Stmt thenBranch,Stmt elseBranch",
                 "Print : Expr Expr",
-                "Var : Token name,Expr initializer"
+                "Var : Token name,Expr initializer",
+                "While : Expr condition,Stmt body"
             });
             return 0;
         }

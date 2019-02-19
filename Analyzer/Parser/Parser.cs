@@ -8,14 +8,18 @@
 //statement      → exprStmt
 //               | ifStmt
 //               | printStmt 
-//               | block;
+//               | block
+//               | whileStmt ;
 //ifStmt         → "if" expression "{" statement "}" ( "else"  "{" statement "}" )? ;
 //block          → "{" declaration* "}" ;
 //exprStmt       → expression ";" ;
 //printStmt      → "print" expression ";" ;
+//whileStmt      → "while" expression  "{" statement "}";
 //expression     → assignment ;
 //assignment     → IDENTIFIER "=" assignment
-//               | equality ;
+//               | logic_or ;
+//logic_or       → logic_and( "or" logic_and )* ;
+//logic_and      → equality( "and" equality )* ;
 //equality       → comparison(( "!=" | "==" ) comparison )* ;
 //comparison     → addition(( ">" | ">=" | "<" | "<=" ) addition )* ;
 //addition       → multiplication(( "-" | "+" ) multiplication )* ;
@@ -96,8 +100,20 @@ namespace NewC.Parser
             if (Match(TokenType.PRINT)) return PrintStatement();
             if (Match(TokenType.LEFT_BRACE)) return new Block(Block());
             if (Match(TokenType.IF)) return IfStatement();
+            if (Match(TokenType.WHILE)) return WhileStatement();
 
             return ExpresionStatement();
+        }
+
+        private Stmt WhileStatement()
+        {
+            var  condition = Expression();
+
+            Consume(TokenType.LEFT_BRACE, "Expect '{' after while condition;");
+            var body = Statement();
+            Consume(TokenType.RIGHT_BRACE, "Expect '}' after while statement;");
+
+            return new While(condition, body);
         }
 
         private Stmt IfStatement()
@@ -159,7 +175,7 @@ namespace NewC.Parser
 
         private Expr Assignment()
         {
-            var expr = Equality();
+            var expr = Or();
 
             if(Match(TokenType.EQUAL))
             {
@@ -174,6 +190,34 @@ namespace NewC.Parser
 
                 Error(equals, "Invalid assignment target");
                 HadError = true;
+            }
+
+            return expr;
+        }
+
+        private Expr Or()
+        {
+            var expr = And();
+            
+            while(Match(TokenType.OR))
+            {
+                Token op = Previous();
+                Expr right = And();
+                return new Logical(expr, op, right);
+            }
+
+            return expr;
+        }
+
+        private Expr And()
+        {
+            var expr = Equality();
+
+            while(Match(TokenType.AND))
+            {
+                Token op = Previous();
+                Expr right = Equality();
+                return new Logical(expr, op, right);
             }
 
             return expr;

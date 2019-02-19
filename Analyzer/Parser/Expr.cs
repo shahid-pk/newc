@@ -11,13 +11,15 @@ namespace NewC.Parser
 		T VisitBinaryExpr(Binary expr);
 		T VisitGroupingExpr(Grouping expr);
 		T VisitLiteralExpr(Literal expr);
+		T VisitLogicalExpr(Logical expr);
 		T VisitUnaryExpr(Unary expr);
 		T VisitVariableExpr(Variable expr);
         T VisitBlockStmt(Block stmt);
         T VisitExpressionStmt(Expression stmt);
+        T VisitIfStmt(If stmt);
         T VisitPrintStmt(Print stmt);
         T VisitVarStmt(Var stmt);
-        T VisitIfStmt(If stmt);
+        T VisitWhileStmt(While stmt);
     }
 
 	public abstract class Expr
@@ -88,6 +90,25 @@ namespace NewC.Parser
 		public override T Accept<T>(IVisitor<T> visitor)
 		{
 			return visitor.VisitLiteralExpr(this);
+		}
+	}
+
+	public class Logical : Expr
+	{
+		public Expr Left { get;private set; }
+		public Token Op { get;private set; }
+		public Expr Right { get;private set; }
+
+		public Logical(Expr left,Token op,Expr right)
+		{
+			this.Left = left;
+			this.Op = op;
+			this.Right = right;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitLogicalExpr(this);
 		}
 	}
 
