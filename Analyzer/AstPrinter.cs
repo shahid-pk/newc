@@ -26,6 +26,11 @@ namespace NewC.Analyzer
             throw new NotImplementedException();
         }
 
+        public string VisitCallExpr(Call expr)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitExpressionStmt(Expression stmt)
         {
             throw new NotImplementedException();

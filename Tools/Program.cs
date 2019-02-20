@@ -17,6 +17,7 @@ namespace NewC.Tools
             DefineAst(outputDir, "Expr", new List<string> {
                 "Assign   : Token name,Expr value",
                 "Binary   : Expr left,Token op,Expr right",
+                "Call     : Expr callee,Token paren,System.Collections.Generic.List<Expr> arguments",
                 "Grouping : Expr expression",
                 "Literal  : object value",
                 "Logical  : Expr left,Token op,Expr right",

@@ -3,6 +3,7 @@ using NewC.Parser;
 using NewC.Scanner;
 using System;
 using System.Collections.Generic;
+using NewC.Runtime.GlobalFunctions;
 
 namespace NewC
 {
@@ -10,13 +11,16 @@ namespace NewC
     {
         private readonly IErrorReporter reporter;
         private Environment environment;
+        private Environment globals;
         public bool HadRuntimeError { get; private set; }
 
         public Interpreter(IErrorReporter reporter)
         {
             this.reporter = reporter;
             this.environment = new Environment();
+            this.globals = environment;
             this.HadRuntimeError = false;
+            globals.DefineVar("clock", new Clock());
         }
 
         public void Interpret(List<Stmt> statements)
@@ -33,6 +37,32 @@ namespace NewC
                 reporter.Error(ex.Token, ex.Message);
                 this.HadRuntimeError = true;
             }
+        }
+
+        public object VisitCallExpr(Call expr)
+        {
+            var callee = Evaluate(expr.Callee);
+            var arguments = new List<object>();
+            
+            foreach(var argument in expr.Arguments)
+            {
+                arguments.Add(Evaluate(argument));
+            }
+
+            if(!(callee is ICallable))
+            {
+                throw new RuntimeException(expr.Paren, "Can only call function and classes.");
+            }
+
+            ICallable function = (ICallable)callee;
+
+            if (arguments.Count != function.Arity())
+            {
+                throw new RuntimeException(expr.Paren, 
+                    $"Expected {function.Arity()} arguments but got { arguments.Count }.");
+            }
+
+            return function.Call(this, arguments);
         }
 
         public object VisitVarStmt(Var stmt)

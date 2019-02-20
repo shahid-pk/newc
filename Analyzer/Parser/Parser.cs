@@ -25,7 +25,9 @@
 //addition       → multiplication(( "-" | "+" ) multiplication )* ;
 //multiplication → unary(( "/" | "*" ) unary )* ;
 //unary          → ( "!" | "-" ) unary
-//               | primary ;
+//               | call ;
+//call           → primary ( "(" arguments? ")" )* ;
+//arguments      → expression ( "," expression )* ;
 //primary        → NUMBER | STRING | "false" | "true" | "nil"
 //               | "(" expression ")" 
 //               | IDENTIFIER;
@@ -285,7 +287,43 @@ namespace NewC.Parser
                 return new Unary(op, right);
             }
 
-            return Primary();
+            return Call();
+        }
+
+        private Expr Call()
+        {
+            var expr = Primary();
+
+            while(true)
+            {
+                if (Match(TokenType.LEFT_PAREN))
+                {
+                    expr = FinishCall(expr);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return expr;
+        }
+
+        private Expr FinishCall(Expr callee)
+        {
+            var arguments = new List<Expr>();
+
+            if(!Check(TokenType.RIGHT_PAREN))
+            {
+                do
+                {
+                    arguments.Add(Expression());
+                } while (Match(TokenType.COMMA));
+            }
+
+            var paren = Consume(TokenType.RIGHT_PAREN, "Expect ')' after arguments.");
+
+            return new Call(callee, paren, arguments);
         }
 
         private Expr Primary()

@@ -1,4 +1,5 @@
 ﻿using NewC.Scanner;
+using System;
 using System.Collections.Generic;
 
 namespace NewC
@@ -27,6 +28,18 @@ namespace NewC
                 throw new RuntimeException(name, $"Variable {name.Lexeme} already defined.");
             }
             values[name.Lexeme] = value;
+        }
+
+        internal void DefineVar(string name, object value)
+        {
+            // this will be used by the interpreter
+            // so throwing c# exception is allowed
+            // to catch language bug
+            if (values.ContainsKey(name))
+            {
+                throw new Exception($"Global {name} already defined.");
+            }
+            values[name] = value;
         }
 
         public object GetVar(Token name)

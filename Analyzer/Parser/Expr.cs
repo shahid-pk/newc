@@ -9,6 +9,7 @@ namespace NewC.Parser
 	{
 		T VisitAssignExpr(Assign expr);
 		T VisitBinaryExpr(Binary expr);
+		T VisitCallExpr(Call expr);
 		T VisitGroupingExpr(Grouping expr);
 		T VisitLiteralExpr(Literal expr);
 		T VisitLogicalExpr(Logical expr);
@@ -60,6 +61,25 @@ namespace NewC.Parser
 		public override T Accept<T>(IVisitor<T> visitor)
 		{
 			return visitor.VisitBinaryExpr(this);
+		}
+	}
+
+	public class Call : Expr
+	{
+		public Expr Callee { get;private set; }
+		public Token Paren { get;private set; }
+		public System.Collections.Generic.List<Expr> Arguments { get;private set; }
+
+		public Call(Expr callee,Token paren, System.Collections.Generic.List<Expr> arguments)
+		{
+			this.Callee = callee;
+			this.Paren = paren;
+			this.Arguments = arguments;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitCallExpr(this);
 		}
 	}
 
