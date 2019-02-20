@@ -17,6 +17,7 @@ namespace NewC.Parser
 		T VisitVariableExpr(Variable expr);
         T VisitBlockStmt(Block stmt);
         T VisitExpressionStmt(Expression stmt);
+        T VisitFunctionStmt(Function stmt);
         T VisitIfStmt(If stmt);
         T VisitPrintStmt(Print stmt);
         T VisitVarStmt(Var stmt);
@@ -70,7 +71,7 @@ namespace NewC.Parser
 		public Token Paren { get;private set; }
 		public System.Collections.Generic.List<Expr> Arguments { get;private set; }
 
-		public Call(Expr callee,Token paren, System.Collections.Generic.List<Expr> arguments)
+		public Call(Expr callee,Token paren,System.Collections.Generic.List<Expr> arguments)
 		{
 			this.Callee = callee;
 			this.Paren = paren;

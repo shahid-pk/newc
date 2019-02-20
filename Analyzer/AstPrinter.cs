@@ -36,6 +36,11 @@ namespace NewC.Analyzer
             throw new NotImplementedException();
         }
 
+        public string VisitFunctionStmt(Function stmt)
+        {
+            throw new NotImplementedException();
+        }
+
         public string VisitGroupingExpr(Grouping expr)
         {
             return Parenthesize("group", expr.Expression);

@@ -40,6 +40,25 @@ namespace NewC.Parser
 		}
 	}
 
+	public class Function : Stmt
+	{
+		public Token Name { get;private set; }
+		public System.Collections.Generic.List<Token> Parameters { get;private set; }
+		public System.Collections.Generic.List<Stmt> Body { get;private set; }
+
+		public Function(Token name,System.Collections.Generic.List<Token> parameters,System.Collections.Generic.List<Stmt> body)
+		{
+			this.Name = name;
+			this.Parameters = parameters;
+			this.Body = body;
+		}
+
+		public override T Accept<T>(IVisitor<T> visitor)
+		{
+			return visitor.VisitFunctionStmt(this);
+		}
+	}
+
 	public class If : Stmt
 	{
 		public Expr Condition { get;private set; }

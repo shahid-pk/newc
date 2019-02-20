@@ -1,9 +1,11 @@
+using System;
+using NewC.Runtime;
 using NewC.Analyzer;
 using NewC.Parser;
 using NewC.Scanner;
-using System;
+using NewC.Runtime.Functions;
 using System.Collections.Generic;
-using NewC.Runtime.GlobalFunctions;
+using Environment = NewC.Runtime.Environment;
 
 namespace NewC
 {
@@ -11,7 +13,7 @@ namespace NewC
     {
         private readonly IErrorReporter reporter;
         private Environment environment;
-        private Environment globals;
+        internal Environment globals;
         public bool HadRuntimeError { get; private set; }
 
         public Interpreter(IErrorReporter reporter)
@@ -39,6 +41,13 @@ namespace NewC
             }
         }
 
+        public object VisitFunctionStmt(Function stmt)
+        {
+            var function = new FunctionDecl(stmt);
+            environment.DefineVar(stmt.Name, function);
+            return null;
+        }
+
         public object VisitCallExpr(Call expr)
         {
             var callee = Evaluate(expr.Callee);
@@ -58,7 +67,7 @@ namespace NewC
 
             if (arguments.Count != function.Arity())
             {
-                throw new RuntimeException(expr.Paren, 
+                throw new RuntimeException(expr.Paren,
                     $"Expected {function.Arity()} arguments but got { arguments.Count }.");
             }
 
@@ -221,7 +230,7 @@ namespace NewC
             return null;
         }
 
-        private void ExecuteBlock(List<Stmt> statements, Environment environment)
+        internal void ExecuteBlock(List<Stmt> statements, Environment environment)
         {
             var previous = this.environment;
             try

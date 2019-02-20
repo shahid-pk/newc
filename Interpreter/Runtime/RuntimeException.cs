@@ -1,7 +1,7 @@
 ﻿using System;
 using NewC.Scanner;
 
-namespace NewC
+namespace NewC.Runtime
 {
     public class RuntimeException: Exception
     {

@@ -132,10 +132,10 @@ namespace NewC.Scanner
                 case "else":    return TokenType.ELSE;
                 case "false":   return TokenType.FALSE;
                 case "for":     return TokenType.FOR;
-                case "fun":     return TokenType.FUN;                      
-                case "if":      return TokenType.IF; 
-                case "nil":     return TokenType.NIL;   
-                case "or":      return TokenType.OR; 
+                case "fn":      return TokenType.FN;               
+                case "if":      return TokenType.IF;
+                case "nil":     return TokenType.NIL;
+                case "or":      return TokenType.OR;
                 case "print":   return TokenType.PRINT;  
                 case "return":  return TokenType.RETURN;
                 case "super":   return TokenType.SUPER;
@@ -146,7 +146,7 @@ namespace NewC.Scanner
                 case "match":   return TokenType.MATCH;
                 default:
                     return 0;
-            }    
+            }
         }
 
         // look forward one character

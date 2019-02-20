@@ -2,8 +2,12 @@
 // grammar rules for newc
 
 //program        → declaration* EOF;
-//declaration    → varDecl
+//declaration    → fnDecl 
+//               | varDecl
 //               | statement ;
+//fnDecl         → "fn" function ;
+//function       → IDENTIFIER "(" parameters? ")" block ;
+//parameters     → IDENTIFIER ( "," IDENTIFIER )* ;
 //varDecl        → "var" IDENTIFIER ( "=" expression )? ";" ;
 //statement      → exprStmt
 //               | ifStmt
@@ -72,6 +76,7 @@ namespace NewC.Parser
             try
             {
                 if (Match(TokenType.VAR)) return VarDeclaration();
+                if (Match(TokenType.FN)) return Function("function");
                 return Statement();
             }
             catch (ParseErrorException)
@@ -80,6 +85,29 @@ namespace NewC.Parser
                 Synchoronize();
                 return null;
             }
+        }
+
+        private Stmt Function(string kind)
+        {
+            var name = Consume(TokenType.IDENTIFIER, $"Expect {kind} name.");
+            Consume(TokenType.LEFT_PAREN, $"Expect '(' after {kind} name.");
+
+            var parameters = new List<Token>();
+
+            if(!Check(TokenType.RIGHT_PAREN))
+            {
+                do
+                {
+                    parameters.Add(Consume(TokenType.IDENTIFIER, "Expect parameter name."));
+                } while (Match(TokenType.COMMA));
+            }
+
+            Consume(TokenType.RIGHT_PAREN, "Expect ')' after parameters.");
+
+            Consume(TokenType.LEFT_BRACE, $"Expect '{{' before {kind} body");
+            var body = Block();
+
+            return new Function(name, parameters, body);
         }
 
         private Stmt VarDeclaration()
@@ -372,7 +400,7 @@ namespace NewC.Parser
                 switch(Peek().Type)
                 {
                     case TokenType.CLASS:
-                    case TokenType.FUN:
+                    case TokenType.FN:
                     case TokenType.IF:
                     case TokenType.VAR:
                     case TokenType.WHILE:

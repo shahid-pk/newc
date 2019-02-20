@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NewC.Runtime.GlobalFunctions
+namespace NewC.Runtime.Functions
 {
     public class Clock : ICallable
     {

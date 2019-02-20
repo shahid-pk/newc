@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NewC
+namespace NewC.Runtime
 {
     public interface ICallable
     {
